@@ -39,7 +39,9 @@ unique_artists
         
 ```
 
-Okay by book?
+413 unique artists!
+
+Okay, how about by book?
 ```{r}
 unique_artists_by_book <- artists %>%
   select(artist_name, book, artist_unique_id) %>%
@@ -49,7 +51,13 @@ unique_artists_by_book <- artists %>%
 
 unique_artists_by_book
 ```
-WHAT KIND OF BARPLOT CAN WE MAKE?
+Gardner has 334 unique artists, while Janson has 243.
+[Post-code awareness: I just realized that the unique id is across texts so making one....served no purpose. This is why it's important to read, children.]
+
+I am out of UNIQUE CREATIVE IDEAS AND I MAY HAVE SPENT CRUCIAL TIME MAKING A SPOTIFY MIX TO CODE TO...
+
+Lets make a bar plot. Everyone loves a good barplot. Also it's late and I'm fairly certain I can make one with limited brain function
+So I am taking the dataset, grouping the entries by book and year, selecting just the name, unique id of artist, as well as book and year. From this, I'm making a brand new column solely composed of the artist name and it's identfier to avoid double counting.
 ```{r}
 unique_artists_by_year <- artists %>%
   group_by(year, book) %>%
@@ -62,6 +70,8 @@ unique_artists_by_year <- artists %>%
 unique_artists_by_year
 ```
 
+I wonder if the number of artists has increased over the years dramatically? That's like something you can see with a barplot yes? YES.
+
 ```{r}
 # Gardner - 	#e07261
 # Janson - 	#86abc5
@@ -69,19 +79,19 @@ unique_artists_by_year
 unique_artists_by_year %>% ggplot(aes(x = factor(year), y = num_of_artists, fill= factor(book))) +
   theme_bw() +
   theme(panel.grid.major.y = element_blank() ) +
-  theme(legend.position = c(0.92, 0.88)) +
+  theme(legend.position = c(0.92, 0.86)) +
   geom_bar(stat='identity', width = 0.7, position = position_dodge(preserve = "single")) +
   scale_fill_manual(drop=FALSE, name = "Textbook",values = c("#e07261", "#86abc5")) +
   scale_x_discrete(limits=rev) +
   coord_flip() +
   labs(y = "Number of Unique Artists", x = "Publication Year", title = "Artist Covered in Major Art History Textbooks From 1926-2020", caption = "based on data from the arthistory data package" ) 
 ```
+Nur, you may ask, why did you pick those colors? Why I'm glad you asked! I used an eyedropper to get a color from the most recent editions of Janson and Gardner. Because I could. 
+In actual relevant plot information, it seems that Gardner is the older of the textbooks with editions from the 1920's in contrast to Janson which seems to not really be used until the 60's.
 
-```{r}
+Things I Would Have Done If I Had More Time and Didn't Procrastinate
++ The number of marginalized artists seen in these textbooks across the years
++ The area dedicated to marginalized artists compared to white men
 
-#levels(unique_artists_by_year$year) 
-unique_artists_by_year %>% ggplot(aes(x = year, y = num_of_artists, fill= factor(book))) +
-  geom_bar(stat='identity', position = position_dodge(preserve = "single")) +
-  scale_fill_discrete(drop=FALSE) +
-  coord_flip()
-```
+Neat trick I learned doing this?
+`scale_x_discrete(limits=rev)` lets you reverse the order of your axis without going through the agony of reordering/leveling!
