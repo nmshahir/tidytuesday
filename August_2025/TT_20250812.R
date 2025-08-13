@@ -51,5 +51,4 @@ event_type_climate <- attribution_studies %>%
           caption = "Data from CarbonBrief (https://www.carbonbrief.org/) and tidytuesday") + 
       ggtitle("The Impact of Climate Change on Extreme Weather Events is Rarely Neutral",subtitle = "Less river flow isn't necessarily a good thing.")
 ggsave("climate_change_event_types.jpg", event_type_climate, width = 11, height =8, units = "in")
-pub_2022 <- attribution_studies %>%
-    filter(publication_year == 2022)
+
