@@ -68,12 +68,99 @@ fide_aug_F_plt <- fide_ratings_august_reduced_F |>
   drop_na(2:5) |>
   # Remove any federations that have no remaining data after drop_na
   filter(if_any(2:5, ~ !is.na(.))) |>
+  arrange(desc(mean_rating)) |>
+  slice_head(n = 5) |>
+  rename(`Average Age` =  mean_age) |> 
+  rename(`# of Players` = num_of_F) |>
+  rename(`Average Rating` = mean_rating) |>
+  rename(`Total # of Games` = total_games) |>
+  rename(Federation = fed) |>
   #Get top 5 and bottom 5 for both men and women
   # Convert fed to factor and drop unused levels
-  mutate(fed = fct_drop(as.factor(fed))) |>
+  mutate(Federation = fct_drop(as.factor(Federation))) |>
   ggparcoord(columns = 2:5, groupColumn = 1, order = "anyClass",
     scale = "center",
     showPoints = TRUE,
-    title = "Federation - Woman",
+    title = "Top Five Federations - Women Players",
     alphaLines = 0.3) +
-    scale_color_viridis(discrete = TRUE)
+    scale_color_viridis(discrete = TRUE) +
+    theme_ipsum() +
+    theme(
+  legend.position="bottom",
+  plot.title = element_text(size=13)
+) +
+  labs(tag = "Tidy Tuesday - Week of 2025/09/23") +
+  xlab("")
+
+fide_aug_M_plt <- fide_ratings_august_reduced_M |>
+  drop_na(2:5) |>
+  # Remove any federations that have no remaining data after drop_na
+  filter(if_any(2:5, ~ !is.na(.))) |>
+  arrange(desc(mean_rating)) |>
+  slice_head(n = 5) |>
+  rename(`Average Age` =  mean_age) |> 
+  rename(`# of Players` = num_of_M) |>
+  rename(`Average Rating` = mean_rating) |>
+  rename(`Total # of Games` = total_games) |>
+  rename(Federation = fed) |>
+  #Get top 5 and bottom 5 for both men and women
+  # Convert fed to factor and drop unused levels
+  mutate(Federation = fct_drop(as.factor(Federation))) |>
+  ggparcoord(columns = 2:5, groupColumn = 1, order = "anyClass",
+    scale = "center",
+    showPoints = TRUE,
+    title = "Top Five Federations - Male Players",
+    alphaLines = 0.3) +
+    scale_color_viridis(discrete = TRUE) +
+    theme_ipsum() +
+    theme(
+  legend.position="bottom",
+  plot.title = element_text(size=13)
+) +
+  xlab("")
+
+fide_aug_F_data <- fide_ratings_august_reduced_F |>
+  drop_na(2:5) |>
+  # Remove any federations that have no remaining data after drop_na
+  filter(if_any(2:5, ~ !is.na(.))) |>
+  arrange(desc(mean_rating)) |>
+  slice_head(n = 5) |>
+  rename(`Average Age` =  mean_age) |> 
+  rename(`# of Players` = num_of_F) |>
+  rename(`Average Rating` = mean_rating) |>
+  rename(`Total # of Games` = total_games) |>
+  rename(Federation = fed) |>
+  #Get top 5 and bottom 5 for both men and women
+  # Convert fed to factor and drop unused levels
+  mutate(Federation= fct_drop(as.factor(Federation)), sex = "F") 
+
+fide_aug_M_data <- fide_ratings_august_reduced_M |>
+  drop_na(2:5) |>
+  # Remove any federations that have no remaining data after drop_na
+  filter(if_any(2:5, ~ !is.na(.))) |>
+  arrange(desc(mean_rating)) |>
+  slice_head(n = 5) |>
+  rename(`Average Age` =  mean_age) |> 
+  rename(`# of Players` = num_of_M) |>
+  rename(`Average Rating` = mean_rating) |>
+  rename(`Total # of Games` = total_games) |>
+  rename(Federation = fed) |>
+  #Get top 5 and bottom 5 for both men and women
+  # Convert fed to factor and drop unused levels
+  mutate(Federation= fct_drop(as.factor(Federation)), sex = "M")
+
+fide_aug_data <- rbind(fide_aug_F_data,fide_aug_M_data)
+
+fide_aug_plt <- fide_aug_data |>
+  ggparcoord(columns = 2:5, groupColumn = 1, order = "anyClass",
+  scale = "center",
+  showPoints = TRUE,
+  title = "Top Five Federations",
+  alphaLines = 0.3) +
+  scale_color_viridis(discrete = TRUE) +
+  theme_ipsum() +
+  theme(
+  legend.position="bottom",
+  plot.title = element_text(size=13)
+) +
+  xlab("")
